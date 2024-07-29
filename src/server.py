@@ -5,6 +5,7 @@ def get_args():
     parser = ArgumentParser()
     parser.add_argument(
         "-a", "--address",
+        dest="host",
         default="localhost",
         help="O endereço no qual este servidor deve rodar"
     )
