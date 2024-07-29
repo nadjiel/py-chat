@@ -3,6 +3,7 @@ from argparse import ArgumentParser
 
 def get_args():
     parser = ArgumentParser()
+
     parser.add_argument(
         "-a", "--address",
         dest="host",
@@ -17,33 +18,35 @@ def get_args():
 
     return parser.parse_args()
 
-def server():
-    # get the hostname
-    host = socket.gethostname()
-    port = 5000  # initiate port no above 1024
+def start(host: str, port: int):
+    server_socket = socket.socket()
 
-    server_socket = socket.socket()  # get instance
-    # look closely. The bind() function takes tuple as argument
-    server_socket.bind((host, port))  # bind host address and port together
+    server_socket.bind((host, port))
+    server_socket.listen()
 
-    # configure how many client the server can listen simultaneously
-    server_socket.listen(2)
-    conn, address = server_socket.accept()  # accept new connection
-    print("Connection from: " + str(address))
+    client_socket, address = server_socket.accept()
+    print(client_socket)
+    print(address)
+
+    print("New connection from: " + str(address))
+
     while True:
         # receive data stream. it won't accept data packet greater than 1024 bytes
-        data = conn.recv(1024).decode()
+        data = client_socket.recv(1024).decode()
+
         if not data:
             # if data is not received break
             break
+        
         print("from connected user: " + str(data))
         data = input(' -> ')
-        conn.send(data.encode())  # send data to the client
+        client_socket.send(data.encode())  # send data to the client
 
-    conn.close()  # close the connection
+    client_socket.close()  # close the connection
 
 
 if __name__ == '__main__':
     args = get_args()
     # print(args)
-    server()
+    # print(socket.gethostname())
+    start(args.host, args.port)
