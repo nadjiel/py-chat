@@ -27,7 +27,7 @@ def communicate(client: socket, address):
 
         client_input = str(data)
 
-        connection["data"] = handle_command(client, connection["data"], client_input)
+        connection["data"] = handle_command(client_input, connection["data"], client)
 
         print(connection)
         
