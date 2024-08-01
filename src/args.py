@@ -1,9 +1,10 @@
 from argparse import ArgumentParser
+import socket
 
-def help(data: dict) -> dict:
+def help(command: str, data: dict, client: socket) -> dict:
     return data
 
-def nick(data: dict, command: str) -> dict:
+def nick(command: str, data: dict, client: socket) -> dict:
     command_parts = command.split()
 
     command_parts_len = len(command_parts)
@@ -19,13 +20,13 @@ def nick(data: dict, command: str) -> dict:
 
     return updated_data
 
-def users(data: dict) -> dict:
+def users(command: str, data: dict, client: socket) -> dict:
     return data
 
-def sendmsg(data: dict) -> dict:
+def sendmsg(command: str, data: dict, client: socket) -> dict:
     return data
 
-def msg(data: dict) -> dict:
+def msg(command: str, data: dict, client: socket) -> dict:
     return data
 
 commands = {
@@ -66,11 +67,14 @@ def is_valid_command(command: str) -> bool:
 
     return False
 
-def handle_command(data: dict, command: str):
+def handle_command(command: str, data: dict, client: socket):
+    response = ""
+    
     if not is_valid_command(command):
-        print(command + " não é um comando válido, use o comando !help para ajuda.")
+        response = command + " não é um comando válido, use o comando !help para ajuda."
+        client.send(response.encode())
         return data
 
     prefix = extract_prefix(command)
 
-    return commands[prefix](data, command)
+    return commands[prefix](command, data, client)
