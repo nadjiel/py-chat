@@ -3,8 +3,21 @@ from argparse import ArgumentParser
 def help(data: dict) -> dict:
     return data
 
-def nick(data: dict) -> dict:
-    return data
+def nick(data: dict, command: str) -> dict:
+    command_parts = command.split()
+
+    command_parts_len = len(command_parts)
+
+    if command_parts_len < 2:
+        print("O comando !nick precisa de um nome como argumento.")
+        return data
+    
+    new_nick = command_parts[1]
+    
+    updated_data = data.copy()
+    updated_data["nick"] = new_nick
+
+    return updated_data
 
 def users(data: dict) -> dict:
     return data
@@ -60,7 +73,4 @@ def handle_command(data: dict, command: str):
 
     prefix = extract_prefix(command)
 
-    return commands[prefix](data)
-
-def get_nick():
-    input()
+    return commands[prefix](data, command)
