@@ -1,22 +1,5 @@
 import socket
-from argparse import ArgumentParser
-
-def get_args():
-    parser = ArgumentParser()
-
-    parser.add_argument(
-        "-a", "--address",
-        dest="host",
-        default="localhost",
-        help="O endereço no qual este servidor deve rodar"
-    )
-    parser.add_argument(
-        "-p", "--port",
-        default=5000,
-        help="A porta na qual este servidor deve rodar"
-    )
-
-    return parser.parse_args()
+from args import get_args
 
 def start(host: str, port: int):
     server_socket = socket.socket()
@@ -47,6 +30,6 @@ def start(host: str, port: int):
 
 if __name__ == '__main__':
     args = get_args()
-    # print(args)
+    print(args)
     # print(socket.gethostname())
     start(args.host, args.port)
