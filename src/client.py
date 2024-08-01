@@ -1,9 +1,7 @@
 import socket
+from args import get_args
 
-def client():
-    host = socket.gethostname()  # as both code is running on same pc
-    port = 5000  # socket server port number
-
+def start(host: str, port: int):
     client_socket = socket.socket()  # instantiate
     client_socket.connect((host, port))  # connect to the server
 
@@ -21,4 +19,6 @@ def client():
 
 
 if __name__ == '__main__':
-    client()
+    args = get_args()
+    print(args)
+    start(args.host, args.port)
