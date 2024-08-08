@@ -18,7 +18,8 @@ def create_connection(thread: Thread) -> dict:
     return {
         "thread": thread,
         "data": {
-            "nick": ""
+            "nick": "",
+            "requests": 0,
         },
     }
 
