@@ -1,10 +1,10 @@
 from argparse import ArgumentParser
 import socket
 
-def help(command: str, data: dict, client: socket) -> dict:
+def help(command: str, data: dict, client: socket, connections: dict) -> dict:
     return data
 
-def nick(command: str, data: dict, client: socket) -> dict:
+def nick(command: str, data: dict, client: socket, connections: dict) -> dict:
     command_parts = command.split()
 
     command_parts_len = len(command_parts)
@@ -20,13 +20,13 @@ def nick(command: str, data: dict, client: socket) -> dict:
 
     return updated_data
 
-def users(command: str, data: dict, client: socket) -> dict:
+def users(command: str, data: dict, client: socket, connections: dict) -> dict:
     return data
 
-def sendmsg(command: str, data: dict, client: socket) -> dict:
+def sendmsg(command: str, data: dict, client: socket, connections: dict) -> dict:
     return data
 
-def msg(command: str, data: dict, client: socket) -> dict:
+def msg(command: str, data: dict, client: socket, connections: dict) -> dict:
     return data
 
 commands = {
@@ -68,7 +68,7 @@ def is_valid_command(command: str) -> bool:
 
     return False
 
-def handle_command(command: str, data: dict, client: socket):
+def handle_command(command: str, data: dict, client: socket, connections: dict):
     response = ""
     
     if not is_valid_command(command):
@@ -78,4 +78,4 @@ def handle_command(command: str, data: dict, client: socket):
 
     prefix = extract_prefix(command)
 
-    return commands[prefix](command, data, client)
+    return commands[prefix](command, data, client, connections)
