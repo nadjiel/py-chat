@@ -21,6 +21,14 @@ def nick(command: str, data: dict, client: socket, connections: dict) -> dict:
     return updated_data
 
 def users(command: str, data: dict, client: socket, connections: dict) -> dict:
+    total_connections = len(connections)
+    response: str = "!users " + str(total_connections)
+
+    for connection_address in connections:
+        response += " " + connections[connection_address]["data"]["nick"]
+    
+    client.send(response.encode())
+
     return data
 
 def sendmsg(command: str, data: dict, client: socket, connections: dict) -> dict:
