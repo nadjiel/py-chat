@@ -31,7 +31,7 @@ def communicate(client: socket, address):
 
     print(connection)
 
-    while True:
+    while not connection["data"]["stopped"]:
         data = client.recv(1024).decode()
 
         if not data: break
