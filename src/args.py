@@ -91,4 +91,6 @@ def handle_command(command: str, data: dict, client: socket, connections: dict):
             client.send(response.encode())
             return data
 
+    data["requests"] += 1
+
     return commands[prefix](command, data, client, connections)
