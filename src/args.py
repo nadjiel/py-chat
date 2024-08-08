@@ -10,7 +10,7 @@ def nick(command: str, data: dict, client: socket, connections: dict) -> dict:
     command_parts_len = len(command_parts)
 
     if command_parts_len < 2:
-        print("O comando !nick precisa de um nome como argumento.")
+        client.send("O comando !nick precisa de um nome como argumento.".encode())
         return data
     
     new_nick = command_parts[1]
@@ -18,7 +18,7 @@ def nick(command: str, data: dict, client: socket, connections: dict) -> dict:
     updated_data = data.copy()
     updated_data["nick"] = new_nick
 
-    return updated_data
+    return users(command, data, client, connections)
 
 def users(command: str, data: dict, client: socket, connections: dict) -> dict:
     total_connections = len(connections)
