@@ -30,7 +30,7 @@ def communicate(client: socket, address):
 
     connection = connections[address]
 
-    print(connection)
+    # print(connection)
 
     while not connection["data"]["stopped"]:
         data = client.recv(1024).decode()
@@ -41,7 +41,7 @@ def communicate(client: socket, address):
 
         connection["data"] = handle_command(client_input, connection["data"], client, connections)
 
-        print(connection)
+        #print(connection)
         
         # print("from connected user: " + str(data))
         # data = input(' -> ')
@@ -59,11 +59,18 @@ def start(host: str, port: int):
     while True:
         client_socket, address = server.accept()
 
+        # print("address: ")
+        # print(address)
+        # print("sockname: ")
+        # print(client_socket.getsockname())
+        # print("peername: ")
+        # print(client_socket.getpeername())
+
         thread = Thread(target=communicate, args=(client_socket, address))
         thread.start()
 
-        connections[address] = create_connection(thread)
-        print(connections)
+        connections[address] = create_connection(thread, client_socket)
+        #print(connections)
         # connections.append(create_connection(thread))
 
         # thread.join()
@@ -90,6 +97,6 @@ def start(host: str, port: int):
 
 if __name__ == '__main__':
     args = get_args()
-    print(args)
+    #print(args)
     # print(socket.gethostname())
     start(args.host, args.port)
