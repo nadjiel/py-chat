@@ -30,5 +30,5 @@ def start(host: str, port: int):
 
 if __name__ == '__main__':
     args = get_args()
-    print(args)
+    #print(args)
     start(args.host, args.port)

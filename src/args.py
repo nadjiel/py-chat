@@ -1,6 +1,14 @@
 from argparse import ArgumentParser
 import socket
 
+def broadcast(message: str, connections: dict, exclude: list = []) -> None:
+    print("exclude: " + str(exclude))
+    for address in connections:
+        print("iteration: " + str(address))
+        if address in exclude: continue
+
+        connections[address]["socket"].send(message.encode())
+
 def help(command: str, data: dict, client: socket, connections: dict) -> dict:
     return data
 
