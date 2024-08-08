@@ -6,7 +6,7 @@ from args import handle_command
 
 connections = {}
 
-def create_connection(thread: Thread) -> dict:
+def create_connection(thread: Thread, socket: socket) -> dict:
     """
     Cria um dicionário representando a conexão de um cliente.
 
@@ -17,6 +17,7 @@ def create_connection(thread: Thread) -> dict:
 
     return {
         "thread": thread,
+        "socket": socket,
         "data": {
             "nick": "",
             "requests": 0,
