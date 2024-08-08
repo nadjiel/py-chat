@@ -2,20 +2,27 @@ import socket
 from args import get_args
 
 def start(host: str, port: int):
-    client_socket = socket.socket()  # instantiate
-    client_socket.connect((host, port))  # connect to the server
+    # Instancia o socket
+    client_socket = socket.socket()
+    # Conecta ao servidor neste host e porta
+    client_socket.connect((host, port))
 
-    message = input(" -> ")  # take input
+    message = input(" -> ")
 
     while message.lower().strip() != 'bye':
-        client_socket.send(message.encode())  # send message
-        data = client_socket.recv(1024).decode()  # receive response
+        # Envia a mensagem em lowercase e sem espaços nas pontas
+        client_socket.send(message.encode())
 
-        print('Received from server: ' + data)  # show in terminal
+        # Recebe a resposta do servidor
+        data = client_socket.recv(1024)
+        server_output = data.decode()
 
-        message = input(" -> ")  # again take input
+        print(server_output)
 
-    client_socket.close()  # close the connection
+        message = input(" -> ")
+
+    # Fecha a conexão com o servidor
+    client_socket.close()
 
 
 if __name__ == '__main__':
