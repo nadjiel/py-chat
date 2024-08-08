@@ -87,8 +87,12 @@ def handle_command(command: str, data: dict, client: socket, connections: dict):
 
     if data["requests"] == 0:
         if prefix != "!nick" and prefix != "!help":
-            response = "Antes de tudo, você deve usar !nick <seu-nome> para as pessoas saberem quem é você."
-            client.send(response.encode())
+            #response = "Antes de tudo, você deve usar !nick <seu-nome> para as pessoas saberem quem é você."
+            #client.send(response.encode())
+            client.shutdown(socket.SHUT_RDWR)
+            client.close()
+
+            data["stopped"] = True
             return data
 
     data["requests"] += 1
