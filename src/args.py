@@ -18,6 +18,8 @@ def nick(command: str, data: dict, client: socket, connections: dict) -> dict:
     updated_data = data.copy()
     updated_data["nick"] = new_nick
 
+    data["requests"] += 1
+
     return users(command, data, client, connections)
 
 def users(command: str, data: dict, client: socket, connections: dict) -> dict:
@@ -28,6 +30,8 @@ def users(command: str, data: dict, client: socket, connections: dict) -> dict:
         response += " " + connections[connection_address]["data"]["nick"]
     
     client.send(response.encode())
+
+    data["requests"] += 1
 
     return data
 
@@ -85,5 +89,11 @@ def handle_command(command: str, data: dict, client: socket, connections: dict):
         return data
 
     prefix = extract_prefix(command)
+
+    if data["requests"] == 0:
+        if prefix != "!nick" and prefix != "!help":
+            response = "Antes de tudo, você deve usar !nick <seu-nome> para as pessoas saberem quem é você."
+            client.send(response.encode())
+            return data
 
     return commands[prefix](command, data, client, connections)
