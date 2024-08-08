@@ -39,6 +39,25 @@ def users(command: str, data: dict, client: socket, connections: dict) -> dict:
     return data
 
 def sendmsg(command: str, data: dict, client: socket, connections: dict) -> dict:
+    response = ""
+    client_adress = client.getpeername()
+
+    print("client_adress: " + str(client_adress))
+
+    command_parts = command.split(None, 1)
+
+    command_parts_len = len(command_parts)
+
+    if command_parts_len < 2:
+        response = "O comando !sendmsg precisa de uma mensagem como argumento."
+
+        client.send(response.encode())
+        return data
+    
+    message = command_parts[1]
+
+    broadcast(message, connections, exclude=[client_adress])
+    
     return data
 
 def msg(command: str, data: dict, client: socket, connections: dict) -> dict:
