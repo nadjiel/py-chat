@@ -5,12 +5,21 @@ from threading import Thread
 from args import handle_command
 
 connections = {}
-threads = []
 
 def create_connection(thread: Thread) -> dict:
+    """
+    Cria um dicionário representando a conexão de um cliente.
+
+    O dicionário tem os atributos thread e data que contêm,
+    respectivamente, a thread que está responsável por essa
+    conexão e um dicionário com os dados desse cliente.
+    """
+
     return {
         "thread": thread,
-        "data": {},
+        "data": {
+            "nick": ""
+        },
     }
 
 def communicate(client: socket, address):
