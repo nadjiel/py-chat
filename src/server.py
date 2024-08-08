@@ -27,7 +27,7 @@ def create_connection(thread: Thread) -> dict:
 def communicate(client: socket, address):
     print("Nova conexão de: " + str(address))
 
-    connection = connections[str(address)]
+    connection = connections[address]
 
     print(connection)
 
@@ -46,7 +46,7 @@ def communicate(client: socket, address):
         # data = input(' -> ')
         # client.send(data.encode())  # send data to the client
 
-    del connections[str(address)]
+    del connections[address]
     client.close()
 
 def start(host: str, port: int):
@@ -61,7 +61,7 @@ def start(host: str, port: int):
         thread = Thread(target=communicate, args=(client_socket, address))
         thread.start()
 
-        connections[str(address)] = create_connection(thread)
+        connections[address] = create_connection(thread)
         print(connections)
         # connections.append(create_connection(thread))
 
