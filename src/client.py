@@ -15,6 +15,9 @@ def start(host: str, port: int):
 
         # Recebe a resposta do servidor
         data = client_socket.recv(1024)
+
+        if not data: break
+
         server_output = data.decode()
 
         print(server_output)
