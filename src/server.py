@@ -20,6 +20,7 @@ def create_connection(thread: Thread) -> dict:
         "data": {
             "nick": "",
             "requests": 0,
+            "stopped": False
         },
     }
 
