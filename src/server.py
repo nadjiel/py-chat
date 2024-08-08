@@ -36,7 +36,7 @@ def communicate(client: socket, address):
 
         client_input = str(data)
 
-        connection["data"] = handle_command(client_input, connection["data"], client)
+        connection["data"] = handle_command(client_input, connection["data"], client, connections)
 
         print(connection)
         
@@ -62,8 +62,6 @@ def start(host: str, port: int):
         connections[str(address)] = create_connection(thread)
         print(connections)
         # connections.append(create_connection(thread))
-
-        threads.append(thread)
 
         # thread.join()
     
