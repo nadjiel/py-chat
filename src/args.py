@@ -15,10 +15,7 @@ def nick(command: str, data: dict, client: socket, connections: dict) -> dict:
     
     new_nick = command_parts[1]
     
-    updated_data = data.copy()
-    updated_data["nick"] = new_nick
-
-    data["requests"] += 1
+    data["nick"] = new_nick
 
     return users(command, data, client, connections)
 
@@ -30,8 +27,6 @@ def users(command: str, data: dict, client: socket, connections: dict) -> dict:
         response += " " + connections[connection_address]["data"]["nick"]
     
     client.send(response.encode())
-
-    data["requests"] += 1
 
     return data
 
