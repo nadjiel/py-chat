@@ -44,6 +44,7 @@ def communicate(client: socket, address):
         # data = input(' -> ')
         # client.send(data.encode())  # send data to the client
 
+    del connections[str(address)]
     client.close()
 
 def start(host: str, port: int):
@@ -59,6 +60,7 @@ def start(host: str, port: int):
         thread.start()
 
         connections[str(address)] = create_connection(thread)
+        print(connections)
         # connections.append(create_connection(thread))
 
         threads.append(thread)
