@@ -49,7 +49,8 @@ def get_args():
     parser.add_argument(
         "-p", "--port",
         default=5000,
-        help="A porta na qual este servidor deve rodar"
+        help="A porta na qual este servidor deve rodar",
+        type=int
     )
 
     return parser.parse_args()
