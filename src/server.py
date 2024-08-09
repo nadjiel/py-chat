@@ -6,6 +6,10 @@ from args import handle_command
 
 connections = {}
 
+def close_connections() -> None:
+    for address in connections:
+        connections[address]["socket"].close()
+
 def create_connection(thread: Thread, socket: socket) -> dict:
     """
     Cria um dicionário representando a conexão de um cliente.
