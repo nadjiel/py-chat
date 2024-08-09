@@ -3,6 +3,14 @@ from args import get_args
 from threading import Thread
 
 def communicate(client: socket) -> None:
+    """
+    Realiza um loop que fica constantemente esperando e recebendo dados
+    do servidor conectado.
+    Se o servidor fechar, desligar ou por algum motivo o recebimento der erro,
+    esta função fará com que o socket cliente não mais possa se comunicar
+    com o servidor.
+    """
+    
     while True:
         try:
             data = client.recv(1024)
