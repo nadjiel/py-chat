@@ -8,6 +8,11 @@ command = ""
 connections = {}
 
 def close_connections() -> None:
+    """
+    Fecha todos os sockets de clientes armazenados no dicionário
+    de conexões.
+    """
+
     for address in connections:
         connections[address]["socket"].close()
 
