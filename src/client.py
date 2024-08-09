@@ -46,18 +46,17 @@ def start(host: str, port: int):
     thread = Thread(target=communicate, args=(client_socket,))
     thread.start()
 
-    command = input().strip().lower()
+    while True:
+        command = input().strip()
 
-    while command != 'bye':
-        #data = None
+        if command == "!exit":
+            break
 
         try:
             # Envia o comando recebido pelo terminal
             client_socket.send(command.encode())
         except:
             break
-
-        command = input()
 
     # Fecha a conexão com o servidor
     client_socket.close()
