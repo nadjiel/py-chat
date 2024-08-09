@@ -61,6 +61,8 @@ def communicate(client: socket, address):
     client.close()
 
 def accept_connections(server: socket) -> None:
+    welcome_msg = "Bem-vindo ao PyChat! 🐍 Se precisar de ajuda use !help."
+
     while command != "!exit":
         client_socket = None
         address = None
@@ -73,6 +75,8 @@ def accept_connections(server: socket) -> None:
         thread = Thread(target=communicate, args=(client_socket, address))
         
         connections[address] = create_connection(thread, client_socket)
+
+        client_socket.send(welcome_msg.encode())
 
         thread.start()
 

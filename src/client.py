@@ -21,9 +21,6 @@ def start(host: str, port: int):
     # Conecta ao servidor neste host e porta
     client_socket.connect((host, port))
 
-    print("Bem-vindo ao PyChat! 🐍")
-    print("Se precisar de ajuda use !help.")
-
     thread = Thread(target=communicate, args=(client_socket,))
     thread.start()
 
