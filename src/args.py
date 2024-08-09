@@ -1,39 +1,122 @@
 from argparse import ArgumentParser
+import socket
 
-def help(data: dict) -> dict:
+def broadcast(message: str, connections: dict, exclude: list = []) -> None:
+    print("exclude: " + str(exclude))
+    for address in connections:
+        print("iteration: " + str(address))
+        if address in exclude: continue
+
+        connections[address]["socket"].send(message.encode())
+
+def help(command: str, data: dict, client: socket, connections: dict) -> dict:
     return data
 
-def nick(data: dict, command: str) -> dict:
+def nick(command: str, data: dict, client: socket, connections: dict) -> dict:
     command_parts = command.split()
 
     command_parts_len = len(command_parts)
 
     if command_parts_len < 2:
-        print("O comando !nick precisa de um nome como argumento.")
+        client.send("O comando !nick precisa de um nome como argumento.".encode())
         return data
     
     new_nick = command_parts[1]
     
-    updated_data = data.copy()
-    updated_data["nick"] = new_nick
+    data["nick"] = new_nick
 
-    return updated_data
+    return users(command, data, client, connections)
 
-def users(data: dict) -> dict:
+def changenickname(command: str, data: dict, client: socket, connections: dict) -> dict:
+    response: str = ""
+    command_parts = command.split()
+
+    command_parts_len = len(command_parts)
+
+    if command_parts_len < 2:
+        response = "O comando !changenickname precisa de um nome como argumento."
+
+        client.send(response.encode())
+        return data
+    
+    old_nick = data["nick"]
+    new_nick = command_parts[1]
+    
+    data["nick"] = new_nick
+
+    response = "!changenickname " + old_nick + " " + new_nick
+
+    broadcast(response, connections)
+
     return data
 
-def sendmsg(data: dict) -> dict:
+def users(command: str, data: dict, client: socket, connections: dict) -> dict:
+    total_connections = len(connections)
+    response: str = "!users " + str(total_connections)
+
+    for connection_address in connections:
+        response += " " + connections[connection_address]["data"]["nick"]
+    
+    client.send(response.encode())
+
     return data
 
-def msg(data: dict) -> dict:
+def sendmsg(command: str, data: dict, client: socket, connections: dict) -> dict:
+    response = ""
+    client_adress = client.getpeername()
+
+    print("client_adress: " + str(client_adress))
+
+    command_parts = command.split(None, 1)
+
+    command_parts_len = len(command_parts)
+
+    if command_parts_len < 2:
+        response = "O comando !sendmsg precisa de uma mensagem como argumento."
+
+        client.send(response.encode())
+        return data
+    
+    response = "!msg "
+    response += data["nick"] + " "
+    response += command_parts[1]
+
+    broadcast(response, connections, exclude=[client_adress])
+    
+    return data
+
+def msg(command: str, data: dict, client: socket, connections: dict) -> dict:
+    return data
+
+def poke(command: str, data: dict, client: socket, connections: dict) -> dict:
+    response: str = ""
+    command_parts = command.split()
+
+    command_parts_len = len(command_parts)
+
+    if command_parts_len < 2:
+        response = "O comando !poke precisa de um nome como argumento."
+
+        client.send(response.encode())
+        return data
+    
+    poker = data["nick"]
+    poked = command_parts[1]
+
+    response = "!poke " + poker + " " + poked
+
+    broadcast(response, connections)
+
     return data
 
 commands = {
     "!help": help,
     "!nick": nick,
+    "!changenickname": changenickname,
     "!users": users,
     "!sendmsg": sendmsg,
     "!msg": msg,
+    "!poke": poke,
 }
 
 def get_args():
@@ -48,7 +131,8 @@ def get_args():
     parser.add_argument(
         "-p", "--port",
         default=5000,
-        help="A porta na qual este servidor deve rodar"
+        help="A porta na qual este servidor deve rodar",
+        type=int
     )
 
     return parser.parse_args()
@@ -66,11 +150,26 @@ def is_valid_command(command: str) -> bool:
 
     return False
 
-def handle_command(data: dict, command: str):
+def handle_command(command: str, data: dict, client: socket, connections: dict):
+    response = ""
+    
     if not is_valid_command(command):
-        print(command + " não é um comando válido, use o comando !help para ajuda.")
+        response = command + " não é um comando válido, use o comando !help para ajuda."
+        client.send(response.encode())
         return data
 
     prefix = extract_prefix(command)
 
-    return commands[prefix](data, command)
+    if data["requests"] == 0:
+        if prefix != "!nick" and prefix != "!help":
+            #response = "Antes de tudo, você deve usar !nick <seu-nome> para as pessoas saberem quem é você."
+            #client.send(response.encode())
+            client.shutdown(socket.SHUT_RDWR)
+            client.close()
+
+            data["stopped"] = True
+            return data
+
+    data["requests"] += 1
+
+    return commands[prefix](command, data, client, connections)

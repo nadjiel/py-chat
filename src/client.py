@@ -1,24 +1,47 @@
 import socket
 from args import get_args
+from threading import Thread
+
+def communicate(client: socket) -> None:
+    while True:
+        try:
+            data = client.recv(1024)
+        except:
+            return
+
+        if not data: return
+
+        server_output = data.decode()
+
+        print(server_output)
 
 def start(host: str, port: int):
-    client_socket = socket.socket()  # instantiate
-    client_socket.connect((host, port))  # connect to the server
+    # Instancia o socket
+    client_socket = socket.socket()
+    # Conecta ao servidor neste host e porta
+    client_socket.connect((host, port))
 
-    message = input(" -> ")  # take input
+    thread = Thread(target=communicate, args=(client_socket,))
+    thread.start()
 
-    while message.lower().strip() != 'bye':
-        client_socket.send(message.encode())  # send message
-        data = client_socket.recv(1024).decode()  # receive response
+    command = input().strip().lower()
 
-        print('Received from server: ' + data)  # show in terminal
+    while command != 'bye':
+        #data = None
 
-        message = input(" -> ")  # again take input
+        try:
+            # Envia o comando recebido pelo terminal
+            client_socket.send(command.encode())
+        except:
+            break
 
-    client_socket.close()  # close the connection
+        command = input()
+
+    # Fecha a conexão com o servidor
+    client_socket.close()
 
 
 if __name__ == '__main__':
     args = get_args()
-    print(args)
+    #print(args)
     start(args.host, args.port)
