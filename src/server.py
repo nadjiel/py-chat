@@ -99,13 +99,13 @@ def start(host: str, port: int):
     thread.start()
 
     print("Esperando por conexões...")
-    print("Use !exit para encerrar o servidor.")
+    print("Quando quiser, use !exit para encerrar o servidor.")
 
     while True:
-        command = input().strip().lower()
+        command = input().strip()
 
         if command != "!exit":
-            print("Comando inválido! Use !exit para encerrar o servidor.")
+            print("Comando inválido! Se quiser sair use !exit para encerrar o servidor.")
         else:
             break
     
@@ -117,6 +117,4 @@ def start(host: str, port: int):
 
 if __name__ == '__main__':
     args = get_args()
-    #print(args)
-    # print(socket.gethostname())
     start(args.host, args.port)
