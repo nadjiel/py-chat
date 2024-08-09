@@ -77,11 +77,21 @@ def accept_connections(server: socket) -> None:
         thread.start()
 
 def start(host: str, port: int):
+    """
+    Inicia o programa separando uma thread que será responsável por
+    aceitar conexões de clientes, enquanto deixa a thread principal
+    receber entradas do terminal para fechar o servidor quando desejado.
+    """
+    
+    # Instancia o socket
     server = socket.socket()
 
+    # Define o endereço e porta aos quais este socket pertence
     server.bind((host, port))
+    # Prepara este socket para escutar clientes
     server.listen()
 
+    # Separando uma thread para estabelecimento de conexões
     thread = Thread(target=accept_connections, args=(server,))
     thread.start()
 
@@ -96,7 +106,9 @@ def start(host: str, port: int):
         else:
             break
     
+    # Fecha os sockets dos clientes
     close_connections()
+    # Fecha o socket do servidor
     server.close()
 
 
