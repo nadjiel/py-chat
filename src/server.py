@@ -18,21 +18,23 @@ def close_connections() -> None:
         
         client_socket.close()
 
-def create_connection(thread: Thread, socket: socket) -> dict:
+def create_connection(socket: socket) -> dict:
     """
     Cria um dicionário representando a conexão de um cliente.
 
-    O dicionário tem os atributos thread e data que contêm,
-    respectivamente, a thread que está responsável por essa
+    O dicionário tem os atributos socket e data que contêm,
+    respectivamente, o socket que está responsável por essa
     conexão e um dicionário com os dados desse cliente.
     """
 
     return {
-        "thread": thread,
         "socket": socket,
         "data": {
             "nick": "",
             "requests": 0,
+        },
+    }
+
 def communicate(client: socket):
     """
     Realiza um loop que fica constantemente esperando e recebendo dados
