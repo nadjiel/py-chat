@@ -14,7 +14,10 @@ def close_connections() -> None:
     """
 
     for address in connections:
-        connections[address]["socket"].close()
+        client_socket = connections[address]["socket"]
+        
+        client_socket.shutdown(socket.SHUT_RDWR)
+        client_socket.close()
 
 def create_connection(thread: Thread, socket: socket) -> dict:
     """
