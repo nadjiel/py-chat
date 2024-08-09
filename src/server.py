@@ -60,9 +60,21 @@ def communicate(client: socket, address):
     client.close()
 
 def accept_connections(server: socket) -> None:
-    welcome_msg = "Bem-vindo ao PyChat! 🐍 Se precisar de ajuda use !help."
+    """
+    Permanece em um loop que aguarda por e estabelece conexões com
+    clientes.
 
-    while command != "!exit":
+    As novas conexões ocasionam a criação de um novo campo no dicionário
+    connections que serve para guardar dados gerados por este cliente.
+
+    Além disso, quando uma nova conexão é estabelecida, uma nova thread é
+    criada para lidar com o fluxo de informações entre servidor e cliente.
+
+    Se o servidor for fechado, ou acontecer algum erro no estabelecimento
+    de conexões, o loop se encerra.
+    """
+
+    while True:
         client_socket = None
         address = None
 
