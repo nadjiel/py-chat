@@ -27,7 +27,7 @@ def communicate(client: socket) -> None:
     
     client.close()
     
-    print("Conexão perdida, insira qualquer coisa para sair.")
+    print("Conexão perdida, pressione enter para sair.")
 
 def start(host: str, port: int):
     """
@@ -40,6 +40,9 @@ def start(host: str, port: int):
     client_socket = socket.socket()
     # Conecta ao servidor neste host e porta
     client_socket.connect((host, port))
+
+    print("Bem-vindo ao PyChat! 🐍")
+    print("Quando quiser desconectar use !exit.")
 
     # Começa uma thread responsável por receber dados do servidor,
     # já que a principal ficará travada com entrada de dados.
