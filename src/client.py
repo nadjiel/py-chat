@@ -7,13 +7,17 @@ def communicate(client: socket) -> None:
         try:
             data = client.recv(1024)
         except:
-            return
+            break
 
-        if not data: return
+        if not data: break
 
         server_output = data.decode()
 
         print(server_output)
+    
+    client.shutdown(socket.SHUT_RDWR)
+    
+    print("Conexão perdida, insira qualquer coisa para sair.")
 
 def start(host: str, port: int):
     # Instancia o socket
