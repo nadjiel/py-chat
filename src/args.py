@@ -27,6 +27,29 @@ def nick(command: str, data: dict, client: socket, connections: dict) -> dict:
 
     return users(command, data, client, connections)
 
+def changenickname(command: str, data: dict, client: socket, connections: dict) -> dict:
+    response: str = ""
+    command_parts = command.split()
+
+    command_parts_len = len(command_parts)
+
+    if command_parts_len < 2:
+        response = "O comando !changenickname precisa de um nome como argumento."
+
+        client.send(response.encode())
+        return data
+    
+    old_nick = data["nick"]
+    new_nick = command_parts[1]
+    
+    data["nick"] = new_nick
+
+    response = "!changenickname " + old_nick + " " + new_nick
+
+    broadcast(response, connections)
+
+    return data
+
 def users(command: str, data: dict, client: socket, connections: dict) -> dict:
     total_connections = len(connections)
     response: str = "!users " + str(total_connections)
@@ -68,6 +91,7 @@ def msg(command: str, data: dict, client: socket, connections: dict) -> dict:
 commands = {
     "!help": help,
     "!nick": nick,
+    "!changenickname": changenickname,
     "!users": users,
     "!sendmsg": sendmsg,
     "!msg": msg,
