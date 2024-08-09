@@ -45,12 +45,12 @@ def communicate(client: socket):
     """
 
     # Pega o endereço deste cliente para acesso no dicionário de conexões.
-    address = client.getpeername()
+    client_address = client.getpeername()
 
-    print("Nova conexão de: " + str(address))
+    print("Nova conexão de: " + str(client_address))
     
     # Pega os dados deste cliente no dicionário de conexões.
-    connection = connections[address]
+    connection = connections[client_address]
 
     while True:
         data = None
@@ -66,12 +66,12 @@ def communicate(client: socket):
 
         client_input = data.decode()
 
-        connection["data"] = handle_command(client_input, connection["data"], client, connections)
+        connection["data"] = handle_command(client_input, client_address, connections)
 
-    print("Conexão com " + str(address) + " perdida.")
+    print("Conexão com " + str(client_address) + " perdida.")
 
     # Remove os dados deste cliente do dicionário de conexões.
-    del connections[address]
+    del connections[client_address]
     # Fecha o socket deste cliente.
     client.close()
 
@@ -141,7 +141,6 @@ def start(host: str, port: int):
     close_connections()
     # Fecha o socket do servidor
     server.close()
-
 
 if __name__ == '__main__':
     args = get_args()
