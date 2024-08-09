@@ -205,7 +205,7 @@ def poke(command: str, client_address, connections: dict) -> dict:
 
         client.send(response.encode())
         return data
-    if command_parts > 2:
+    if command_parts_length > 2:
         response = "O comando !poke só recebe o nome de quem vai ser cutucado."
 
         client.send(response.encode())
