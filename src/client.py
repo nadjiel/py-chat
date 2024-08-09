@@ -6,6 +6,7 @@ def communicate(client: socket) -> None:
     """
     Realiza um loop que fica constantemente esperando e recebendo dados
     do servidor conectado.
+
     Se o servidor fechar, desligar ou por algum motivo o recebimento der erro,
     esta função fará com que o socket cliente não mais possa se comunicar
     com o servidor.
@@ -29,11 +30,19 @@ def communicate(client: socket) -> None:
     print("Conexão perdida, insira qualquer coisa para sair.")
 
 def start(host: str, port: int):
+    """
+    Ponto de entrada do código deste cliente.
+
+    Esta função 
+    """
+
     # Instancia o socket
     client_socket = socket.socket()
     # Conecta ao servidor neste host e porta
     client_socket.connect((host, port))
 
+    # Começa uma thread responsável por receber dados do servidor,
+    # já que a principal ficará travada com entrada de dados.
     thread = Thread(target=communicate, args=(client_socket,))
     thread.start()
 
@@ -56,5 +65,4 @@ def start(host: str, port: int):
 
 if __name__ == '__main__':
     args = get_args()
-    #print(args)
     start(args.host, args.port)
