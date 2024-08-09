@@ -1,3 +1,14 @@
+def nick_is_in_connections(nick: str, connections: dict) -> bool:
+    """
+    Diz se um nick está entre as conexões atuais.
+    """
+    
+    for address in connections:
+        if connections[address]["data"]["nick"] == nick:
+            return True
+        
+    return False
+
 def broadcast(message: str, connections: dict, exclude: tuple = ()) -> None:
     """
     Manda a mensagem recebida para todos os clientes conectados exceto
@@ -213,6 +224,12 @@ def poke(command: str, client_address, connections: dict) -> dict:
     
     poker = data["nick"]
     poked = command_parts[1]
+    
+    if not nick_is_in_connections(poked, connections):
+        response = poked + " não está entre os clientes conectados, tente outro."
+
+        client.send(response.encode())
+        return data
 
     response = "!poke " + poker + " " + poked
 
