@@ -27,10 +27,8 @@ def get_args():
 
     return parser.parse_args()
 
-def broadcast(message: str, connections: dict, exclude: list = []) -> None:
-    print("exclude: " + str(exclude))
+def broadcast(message: str, connections: dict, exclude: tuple = ()) -> None:
     for address in connections:
-        print("iteration: " + str(address))
         if address in exclude: continue
 
         connections[address]["socket"].send(message.encode())
@@ -171,7 +169,7 @@ def sendmsg(command: str, client_address, connections: dict) -> dict:
     )
 
     # Manda para todos os clientes conectados menos este a mensagem recebida.
-    broadcast(response, connections, exclude=[client_address])
+    broadcast(response, connections, exclude=(client_address,))
     
     return data
 
