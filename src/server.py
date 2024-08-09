@@ -33,11 +33,11 @@ def create_connection(thread: Thread, socket: socket) -> dict:
         "data": {
             "nick": "",
             "requests": 0,
-            "stopped": False
-        },
-    }
+def communicate(client: socket):
 
-def communicate(client: socket, address):
+    # Pega o endereço deste cliente para acesso no dicionário de conexões.
+    address = client.getpeername()
+
     print("Nova conexão de: " + str(address))
 
     connection = connections[address]
