@@ -79,15 +79,15 @@ def accept_connections(server: socket) -> None:
         address = None
 
         try:
+            # Espera por uma nova conexão de cliente.
             client_socket, address = server.accept()
         except:
             return
 
-        thread = Thread(target=communicate, args=(client_socket, address))
+        # Cria uma nova thread que lidará com a comunicação com o novo cliente.
+        thread = Thread(target=communicate, args=(client_socket,))
         
-        connections[address] = create_connection(thread, client_socket)
-
-        client_socket.send(welcome_msg.encode())
+        connections[address] = create_connection(client_socket)
 
         thread.start()
 
