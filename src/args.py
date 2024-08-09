@@ -54,9 +54,11 @@ def sendmsg(command: str, data: dict, client: socket, connections: dict) -> dict
         client.send(response.encode())
         return data
     
-    message = command_parts[1]
+    response = "!msg "
+    response += data["nick"] + " "
+    response += command_parts[1]
 
-    broadcast(message, connections, exclude=[client_adress])
+    broadcast(response, connections, exclude=[client_adress])
     
     return data
 
