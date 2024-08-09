@@ -10,11 +10,16 @@ def start(host: str, port: int):
     message = input(" -> ")
 
     while message.lower().strip() != 'bye':
-        # Envia a mensagem em lowercase e sem espaços nas pontas
-        client_socket.send(message.encode())
+        data = None
 
-        # Recebe a resposta do servidor
-        data = client_socket.recv(1024)
+        try:
+            # Envia a mensagem em lowercase e sem espaços nas pontas
+            client_socket.send(message.encode())
+
+            # Recebe a resposta do servidor
+            data = client_socket.recv(1024)
+        except:
+            break
 
         if not data: break
 
