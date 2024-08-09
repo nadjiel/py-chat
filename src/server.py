@@ -34,29 +34,44 @@ def create_connection(thread: Thread, socket: socket) -> dict:
             "nick": "",
             "requests": 0,
 def communicate(client: socket):
+    """
+    Realiza um loop que fica constantemente esperando e recebendo dados
+    do cliente conectado e mandando respostas de volta para ele.
+
+    Se o cliente fechar, desligar ou por algum motivo o recebimento der erro,
+    esta função fará com que o socket excluirá os dados deste cliente e
+    encerrará sua conexão com ele, parando, assim o loop.
+    """
 
     # Pega o endereço deste cliente para acesso no dicionário de conexões.
     address = client.getpeername()
 
     print("Nova conexão de: " + str(address))
-
+    
+    # Pega os dados deste cliente no dicionário de conexões.
     connection = connections[address]
 
-    while not connection["data"]["stopped"]:
+    while True:
         data = None
 
         try:
+            # Espera e recebe dados enviados pelo cliente.
             data = client.recv(1024)
         except:
             break
 
+        # Se o cliente fechou seu socket, para a conexão.
         if not data: break
 
         client_input = data.decode()
 
         connection["data"] = handle_command(client_input, connection["data"], client, connections)
 
+    print("Conexão com " + str(address) + " perdida.")
+
+    # Remove os dados deste cliente do dicionário de conexões.
     del connections[address]
+    # Fecha o socket deste cliente.
     client.close()
 
 def accept_connections(server: socket) -> None:
