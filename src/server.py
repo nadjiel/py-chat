@@ -1,8 +1,8 @@
 import socket
-from args import get_args
 from threading import Thread
+from args import get_args
 
-from args import handle_command
+from service import handle_command
 
 connections = {}
 
