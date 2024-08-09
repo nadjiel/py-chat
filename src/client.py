@@ -1,5 +1,19 @@
 import socket
 from args import get_args
+from threading import Thread
+
+def communicate(client: socket) -> None:
+    while True:
+        try:
+            data = client.recv(1024)
+        except:
+            return
+
+        if not data: return
+
+        server_output = data.decode()
+
+        print(server_output)
 
 def start(host: str, port: int):
     # Instancia o socket
@@ -7,27 +21,24 @@ def start(host: str, port: int):
     # Conecta ao servidor neste host e porta
     client_socket.connect((host, port))
 
-    message = input(" -> ")
+    print("Bem-vindo ao PyChat! 🐍")
+    print("Se precisar de ajuda use !help.")
 
-    while message.lower().strip() != 'bye':
-        data = None
+    thread = Thread(target=communicate, args=(client_socket,))
+    thread.start()
+
+    command = input().strip().lower()
+
+    while command != 'bye':
+        #data = None
 
         try:
-            # Envia a mensagem em lowercase e sem espaços nas pontas
-            client_socket.send(message.encode())
-
-            # Recebe a resposta do servidor
-            data = client_socket.recv(1024)
+            # Envia o comando recebido pelo terminal
+            client_socket.send(command.encode())
         except:
             break
 
-        if not data: break
-
-        server_output = data.decode()
-
-        print(server_output)
-
-        message = input(" -> ")
+        command = input()
 
     # Fecha a conexão com o servidor
     client_socket.close()
