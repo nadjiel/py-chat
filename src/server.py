@@ -34,22 +34,19 @@ def communicate(client: socket, address):
 
     connection = connections[address]
 
-    # print(connection)
-
     while not connection["data"]["stopped"]:
-        data = client.recv(1024).decode()
+        data = None
+
+        try:
+            data = client.recv(1024)
+        except:
+            break
 
         if not data: break
 
-        client_input = str(data)
+        client_input = data.decode()
 
         connection["data"] = handle_command(client_input, connection["data"], client, connections)
-
-        #print(connection)
-        
-        # print("from connected user: " + str(data))
-        # data = input(' -> ')
-        # client.send(data.encode())  # send data to the client
 
     del connections[address]
     client.close()
