@@ -88,6 +88,27 @@ def sendmsg(command: str, data: dict, client: socket, connections: dict) -> dict
 def msg(command: str, data: dict, client: socket, connections: dict) -> dict:
     return data
 
+def poke(command: str, data: dict, client: socket, connections: dict) -> dict:
+    response: str = ""
+    command_parts = command.split()
+
+    command_parts_len = len(command_parts)
+
+    if command_parts_len < 2:
+        response = "O comando !poke precisa de um nome como argumento."
+
+        client.send(response.encode())
+        return data
+    
+    poker = data["nick"]
+    poked = command_parts[1]
+
+    response = "!poke " + poker + " " + poked
+
+    broadcast(response, connections)
+
+    return data
+
 commands = {
     "!help": help,
     "!nick": nick,
@@ -95,6 +116,7 @@ commands = {
     "!users": users,
     "!sendmsg": sendmsg,
     "!msg": msg,
+    "!poke": poke,
 }
 
 def get_args():
