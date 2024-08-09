@@ -64,7 +64,6 @@ def start(host: str, port: int):
     # Fecha a conexão com o servidor
     client_socket.close()
 
-
 if __name__ == '__main__':
     args = get_args()
     start(args.host, args.port)
