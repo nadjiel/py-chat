@@ -1,12 +1,19 @@
-
-
 def broadcast(message: str, connections: dict, exclude: tuple = ()) -> None:
+    """
+    Manda a mensagem recebida para todos os clientes conectados exceto
+    aqueles cujo endereço estiver no argumento exclude.
+    """
+    
     for address in connections:
         if address in exclude: continue
 
         connections[address]["socket"].send(message.encode())
 
 def help(command: str, client_address, connections: dict) -> dict:
+    """
+    Manda dados sobre quais comandos estão disponíveis para o cliente solicitante.
+    """
+    
     # Pega os dados necessários do dicionário de conexões.
     connection = connections[client_address]
     client = connection["socket"]
@@ -30,6 +37,13 @@ def help(command: str, client_address, connections: dict) -> dict:
     return data
 
 def nick(command: str, client_address, connections: dict) -> dict:
+    """
+    Define o nome de usuário do cliente.
+
+    Se o comando não tiver o novo nome do cliente ou tiver vários nomes a
+    função não vai ser bem sucedida.
+    """
+
     # Pega os dados necessários do dicionário de conexões.
     connection = connections[client_address]
     client = connection["socket"]
@@ -61,6 +75,14 @@ def nick(command: str, client_address, connections: dict) -> dict:
     return users(command, client_address, connections)
 
 def changenickname(command: str, client_address, connections: dict) -> dict:
+    """
+    Muda o nome de usuário do cliente solicitante e avisa isso para todos
+    os clientes.
+
+    Se o comando não tiver o novo nome do cliente ou tiver vários nomes a
+    função não vai ser bem sucedida.
+    """
+    
     # Pega os dados necessários do dicionário de conexões.
     connection = connections[client_address]
     client = connection["socket"]
@@ -97,6 +119,10 @@ def changenickname(command: str, client_address, connections: dict) -> dict:
     return data
 
 def users(command: str, client_address, connections: dict) -> dict:
+    """
+    Manda para o cliente solicitante informações sobre os usuários conectados.
+    """
+    
     # Pega os dados necessários do dicionário de conexões.
     connection = connections[client_address]
     client = connection["socket"]
@@ -115,6 +141,13 @@ def users(command: str, client_address, connections: dict) -> dict:
     return data
 
 def sendmsg(command: str, client_address, connections: dict) -> dict:
+    """
+    Manda a mensagem passada no comando para todos os clientes do
+    chat, com a exceção do cliente que a mandou.
+    
+    Se o comando não tiver a mensagem a função não vai ser bem sucedida.
+    """
+    
     # Pega os dados necessários do dicionário de conexões.
     connection = connections[client_address]
     client = connection["socket"]
@@ -147,6 +180,14 @@ def sendmsg(command: str, client_address, connections: dict) -> dict:
     return data
 
 def poke(command: str, client_address, connections: dict) -> dict:
+    """
+    Manda para todos os clientes conectados uma mensagem dizendo que
+    o cliente tal cutucou o cliente fulano.
+
+    Se o comando não tiver o destinatário da cutucada ou tiver mais de
+    um destinatário, a função não vai ser bem sucedida.
+    """
+    
     # Pega os dados necessários do dicionário de conexões.
     connection = connections[client_address]
     client = connection["socket"]
