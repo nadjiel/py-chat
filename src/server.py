@@ -4,7 +4,6 @@ from threading import Thread
 
 from args import handle_command
 
-command = ""
 connections = {}
 
 def close_connections() -> None:
