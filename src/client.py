@@ -13,6 +13,7 @@ def communicate(client: socket) -> None:
     
     while True:
         try:
+            # Espera o recebimento de dados de servidor
             data = client.recv(1024)
         except:
             break
