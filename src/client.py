@@ -25,7 +25,7 @@ def communicate(client: socket) -> None:
 
         print(server_output)
     
-    client.shutdown(socket.SHUT_RDWR)
+    client.close()
     
     print("Conexão perdida, insira qualquer coisa para sair.")
 
