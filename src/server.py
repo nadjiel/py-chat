@@ -102,7 +102,7 @@ def start(host: str, port: int):
         command = input().strip().lower()
 
         if command != "!exit":
-            print("Comando inválido!")
+            print("Comando inválido! Use !exit para encerrar o servidor.")
         else:
             break
     
